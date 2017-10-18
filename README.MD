@@ -5,6 +5,7 @@
 You need go dep.
 
 - GOPATH=$(pwd)
+- cd src/github.com/SilverCory/LastFMScrobbler/
 - dep ensure
 - go build src/github.com/SilverCory/LastFMScrobbler/main.go
  TADA!
