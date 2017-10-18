@@ -108,27 +108,11 @@ func (t *Track) LoadDuration() {
 
 func (t *Track) FindImageURL() string {
 
-	for _, v := range t.Images {
-		if v.Size == "large" {
-			return v.URL
-		}
-	}
-
-	for _, v := range t.Images {
-		if v.Size == "extralarge" {
-			return v.URL
-		}
-	}
-
-	for _, v := range t.Images {
-		if v.Size == "medium" {
-			return v.URL
-		}
-	}
-
-	for _, v := range t.Images {
-		if v.Size == "small" {
-			return v.URL
+	for _, size := range []string{"large", "extralarge", "medium", "small"} {
+		for _, v := range t.Images {
+			if v.Size == size {
+				return v.URL
+			}
 		}
 	}
 
