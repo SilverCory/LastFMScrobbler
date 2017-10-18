@@ -5,9 +5,13 @@ import (
 	"github.com/SilverCory/LastFMScrobbler/bot"
 	"github.com/SilverCory/LastFMScrobbler/config"
 	"github.com/SilverCory/LastFMScrobbler/scrobbler"
+	"os"
+	"runtime"
 )
 
 func main() {
+
+	runtime.GOMAXPROCS(1)
 
 	conf := &config.ScrobblerConfig{}
 	conf.Load()
