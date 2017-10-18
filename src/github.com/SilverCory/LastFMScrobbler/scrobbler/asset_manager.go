@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"sync"
 )
 
@@ -93,7 +94,7 @@ func (am *AssetManager) GetAssetsOfType(Type int) (*[]DiscordAsset, error) {
 }
 
 func (am *AssetManager) RemoveAsset(id string) error {
-	req, err := am.makeRequest("DELETE", BASEURL+"/"+id, nil)
+	req, err := am.makeRequest("DELETE", am.getBaseURL()+"/"+id, nil)
 	if err != nil {
 		return err
 	}
@@ -119,7 +120,7 @@ func (am *AssetManager) RemoveAsset(id string) error {
 
 func (am *AssetManager) AddAsset(name, image string, Type int) (*DiscordAsset, error) {
 	body := fmt.Sprintf("{\"name\": %q, \"image\": %q, \"type\": %d}", name, image, Type)
-	req, err := am.makeRequest("POST", BASEURL, bytes.NewBuffer([]byte(body)))
+	req, err := am.makeRequest("POST", am.getBaseURL(), bytes.NewBuffer([]byte(body)))
 	if err != nil {
 		return nil, err
 	}
@@ -146,7 +147,7 @@ func (am *AssetManager) GetAllAssets() ([]DiscordAsset, error) {
 		return am.assets, nil
 	}
 
-	req, err := am.makeRequest("GET", BASEURL, nil)
+	req, err := am.makeRequest("GET", am.getBaseURL(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -218,4 +219,8 @@ func (am *AssetManager) addHeaders(r *http.Request) {
 	r.Header.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
 	r.Header.Add("authorization", am.Token)
 	r.Header.Add("origin", "discordapp.com")
+}
+
+func (am *AssetManager) getBaseURL() string {
+	return strings.Replace(BASEURL, "%APP_ID%", am.AppID, 1)
 }
